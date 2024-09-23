@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cricket Game</title>
+    <style>
+        body{
+            text-align:center;
+        }
+        .Bat {
+            background-color: yellowgreen;
+            border:none;
+            padding:5px;
+        }
+        .Ball {
+            background-color: lightcoral;
+            border:none;
+            padding:5px;
+        }
+        .Stump {
+            background-color: lightseagreen;
+            border:none;
+            padding:5px;
+        }
+        .sport-image{
+            height:100px;
+        }
+        .sport{
+            margin:10px;
+            border-radius:10px;
+            cursor: pointer;
+        }
+        .Reset {
+            background-color: lightsteelblue;
+            border:none;
+            padding:10px;
+            size:10px;
+            border-radius:3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bat Ball Stump Game</h1>
+    <Button class="Bat sport" onclick=" generateComputerChoice('Bat') "><img src="bat.png" class="sport-image"></Button>
+    <Button class="Ball sport" onclick=" generateComputerChoice('Ball') "><img src="ball.png" class="sport-image"></Button>
+    <Button class="Stump sport" onclick=" generateComputerChoice('Stump') "><img src="stump.png" class="sport-image"></Button>
+
+    <h3 id="user-move"></h3>
+    <h3 id="computer-move"></h3>
+    <h3 id="result"></h3>
+    <h3 id="score"></h3>
+
+    <Button class="Reset" onclick=" localStorage.clear() 
+    score= {
+        win: 0,
+        lost: 0,
+        tie: 0
+    }; display()">Reset</Button>
+
+    <script>
+
+        let lastscore=localStorage.getItem('score');
+        let score=JSON.parse(lastscore) || 
+                            {
+                                win: 0,
+                                lost: 0,
+                                tie: 0,
+                            };
+
+        display_score =function(){
+            return `Won:${score.win} Lost:${score.lost} Tie:${score.tie}`;
+        }
+
+        function display()
+        {
+            document.querySelector('#score').innerText=`Overall score ${display_score()}`;
+        }
+
+        function generateComputerChoice(user) {
+        let num=Math.random()*3;//Random number between 0 3
+        let computer;
+        let comp;
+        if(num>0 && num<=1){
+            computer='Bat';
+            comp='computer choice is Bat';
+        }
+        else if(num>1 && num<=2){
+            computer='Ball';
+            comp='computer choice is Ball';
+        }
+        else
+        {
+            computer='Stump';
+            comp='computer choice is Stump';
+        }
+
+        let result='';
+        if(computer === 'Bat')
+        {
+            result=(user === 'Bat')? 'Tie' : (user === 'Ball')? 'Computer has Won' : 'User has Won';
+        }
+        else if(computer === 'Ball')
+        {
+            result=(user === 'Ball')? 'Tie' : (user === 'Bat')? 'User has Won' : 'Computer has Won';
+        }
+        else
+        {
+            result=(user === 'Stump')? 'Tie' : (user === 'Bat')? 'Computer has Won' : 'User has Won';
+        }
+       
+        if(result === 'User has Won')
+        {
+            score.win++;
+            localStorage.setItem('score',JSON.stringify(score));
+        }
+        else if(result === 'Computer has Won')
+        {
+            score.lost++;
+            localStorage.setItem('score',JSON.stringify(score));
+
+        }
+        else
+        {
+            score.tie++;
+            localStorage.setItem('score',JSON.stringify(score));
+
+        }
+        /*alert(`You have choosen ${user}. Computer has choosen ${computer}. So, ${result}
+        ${display_score()}`);//short-cut*/
+        
+        document.querySelector('#user-move').innerText=`You have choosen ${user}`;
+        document.querySelector('#computer-move').innerText=`Computer has choosen ${computer}`;
+        document.querySelector('#result').innerText=`Result: ${result}`;
+        document.querySelector('#score').innerText=`Overall score ${display_score()}`;
+
+      }
+    </script>
+</body>
+</html>
